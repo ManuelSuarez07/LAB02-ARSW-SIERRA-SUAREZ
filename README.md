@@ -3,7 +3,9 @@
 
 #### Laboratorio - Programación concurrente, condiciones de carrera, esquemas de sincronización, colecciones sincronizadas y concurrentes.
 
-Ejercicio inividual o en parejas.
+Ejercicio inividual o en parejas:
+1) Yeltzyn Sierra.
+2) Manuel Suarez.
 
 ### Part I
 
@@ -24,6 +26,8 @@ Control de hilos con [wait/notify.](http://howtodoinjava.com/core-java/multi-thr
     Luego, se debe esperar a que el usuario presione ENTER para reanudar
     la ejecución de los mismos. Utilice los mecanismos de sincronización
     provistos por el lenguaje (wait y notify, notifyAll).
+
+    Respositorio donde se soluciono el primer punto: [*Primer Punto Solucionado*](https://github.com/ManuelSuarez07/LAB02-ARSW-SIERRA-SUAREZ-FIRSTPART.git).
 
 Tenga en cuenta:
 
