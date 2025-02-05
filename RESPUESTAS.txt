@@ -21,14 +21,11 @@ Soluciones Realizadas
 Sincronización de Acceso a Recursos Compartidos:
 
 Se utilizó un bloque synchronized en el método snakeCalc() de la clase Snake para proteger el acceso a snakeBody y evitar condiciones de carrera.
-java
 
-Verify
-Run
-Copy code
 synchronized (this) {
     snakeBody.push(newCell);
 }
+
 Uso de Colecciones Sincronizadas:
 
 Se cambió LinkedList<Cell> por Collections.synchronizedList(new LinkedList<Cell>()) para que la lista sea segura para el acceso concurrente.
