@@ -1,37 +1,35 @@
-1. Posibles condiciones de carrera
-En el código del juego Snake, se identifican las siguientes condiciones de carrera:
+ 1. Posibles condiciones de carrera
+Se encontraron las siguientes condiciones de carrera en el código del juego Snake:
 
-Acceso Concurrente a Recursos Compartidos: Las serpientes (Snake) acceden a recursos compartidos como el tablero (Board) y las celdas (Cell). Si varias serpientes intentan modificar el estado de una celda al mismo tiempo (por ejemplo, al comer un ratón o al chocar contra una barrera), puede haber condiciones de carrera.
+* Snake accede a recursos compartidos, como el tablero y las celdas. Si muchas serpientes intentan cambiar el estado de la celda al mismo tiempo (por ejemplo, comiéndose el ratón o corriendo hacia un lugar seguro), puede producirse una condición de carrera.
 
-Modificación de la Lista de Cuerpos de Serpientes: La lista snakeBody de cada serpiente se modifica en el hilo de ejecución de la serpiente. Si dos serpientes intentan acceder y modificar el mismo objeto Cell al mismo tiempo, esto puede llevar a inconsistencias.
+* La lista snakeBody de cada serpiente se modifica en el hilo de ejecución de la serpiente. Si dos serpientes intentan acceder y modificar el mismo objeto Cell al mismo tiempo, esto puede llevar a inconsistencias.
 
-2. Uso inadecuado de colecciones
-Colecciones No Sincronizadas: Las colecciones como LinkedList<Cell> en Snake no están sincronizadas. Esto puede causar problemas si varias serpientes intentan acceder y modificar la lista de celdas al mismo tiempo. Durante las pruebas, al aumentar la velocidad del juego, se observaron errores en la lógica del juego, como que las serpientes se "comían" entre sí o se movían a posiciones incorrectas.
+2. Mal uso de colecciones
+* Las colecciones como LinkedList<Cell> en Snake no estan sincronizadas, lo cual puede causar problemas si varias serpientes intentan acceder y modificar la lista de celdas al mismo tiempo. Durante las pruebas, se produjeron errores de lógica del juego al aumentar la velocidad del juego, como que las serpientes se "comieran" entre sí o se movieran en la dirección incorrecta.
 
-Acceso Concurrente a Board: El acceso a las celdas del tablero (Board.gameboard) no está protegido, lo que puede llevar a condiciones de carrera si varias serpientes intentan acceder a la misma celda simultáneamente.
+*  El acceso a las celdas del tablero (board.gameboard) no estaba protegido, lo que podía generar condiciones de carrera si varias serpientes intentaban acceder a la misma celda al mismo tiempo.
 
-3. Uso innecesario de esperas activas
-Uso de synchronized y wait(): En el método run() de la clase Snake, se utiliza synchronized y wait() para pausar el hilo de la serpiente. Esto puede ser considerado una espera activa si no se gestiona adecuadamente, ya que puede llevar a un uso ineficiente de los recursos del sistema. En su lugar, se podría utilizar un mecanismo de notificación más eficiente.
-4. Regiones críticas asociadas a las condiciones de carrera
-Modificación de snakeBody: La modificación de la lista snakeBody es una región crítica, ya que puede ser accedida por múltiples hilos. Para eliminar las condiciones de carrera, se sincronizó el acceso a esta lista utilizando un bloque synchronized en el método snakeCalc().
+3. No se utiliza la importancia de la tarea de espera
+En el método run() de la clase Snake, se utilizan synchronized y wait() para pausar el hilo de Snake. Si no se configura correctamente. Esto puede ser considerado una espera activa ya que puede llevar a un uso ineficiente de los recursos del sistema. En su lugar, se podría utilizar un mecanismo de notificación más eficiente.
 
-Acceso a Board.gameboard: El acceso a las celdas del tablero también es una región crítica. Se debe sincronizar el acceso a las celdas para evitar que múltiples serpientes modifiquen el mismo objeto Cell al mismo tiempo.
+4. Regiones críticas relacionadas con la condición racial
+Esto puede ser considerado una espera activa si no se gestiona adecuadamente, ya que puede llevar a un uso ineficiente de los recursos del sistema. En su lugar, se podría utilizar un mecanismo de notificación más eficiente.
 
-Soluciones Realizadas
+El acceso a las celdas del tablero también es una región crítica. Se debe sincronizar el acceso a las celdas para evitar que múltiples serpientes modifiquen el mismo objeto Cell al mismo tiempo.
+
+
+Solución implementada
 Sincronización de Acceso a Recursos Compartidos:
 
-Se utilizó un bloque synchronized en el método snakeCalc() de la clase Snake para proteger el acceso a snakeBody y evitar condiciones de carrera.
+Utilizamos un bloque synchronized en el método snakeCalc() de la clase Snake para proteger el acceso a snakeBody y evitar las condiciones de carrera.
 
-synchronized (this) {
+synchronized(this) {
     snakeBody.push(newCell);
 }
 
-Uso de Colecciones Sincronizadas:
+También se cambió LinkedList<Cell> por Collections.synchronizedList(new LinkedList<Cell>()) para que la lista sea segura para el acceso concurrente.Al igual que Se mantuvo el uso de wait() y notify() en el método start() y stop(), pero se revisó su implementación para asegurar que no se generen esperas activas innecesarias.
 
-Se cambió LinkedList<Cell> por Collections.synchronizedList(new LinkedList<Cell>()) para que la lista sea segura para el acceso concurrente.
-Evitar Esperas Activas:
 
-Se mantuvo el uso de wait() y notify() en el método start() y stop(), pero se revisó su implementación para asegurar que no se generen esperas activas innecesarias.
-Interfaz de Usuario para Controlar el Juego:
 
-Se añadieron componentes a la interfaz gráfica para mostrar la serpiente más larga y la peor serpiente al pausar el juego. Esto se implementó utilizando JLabel en la clase SnakeApp
+Por ultimo ae agregó una interfaz gráfica que muestra la serpiente más larga y la peor serpiente cuando terminas el juego. Esto se hace usando un JLabel en la clase SnakeApp.
